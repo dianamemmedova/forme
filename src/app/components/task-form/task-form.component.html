@@ -1,0 +1,50 @@
+<button class="back-btn" (click)="onCancel()">← Geri</button>
+<h2 class="form-title">Yeni tapşırıq</h2>
+
+<div class="form-box">
+  <div class="field">
+    <label>Tapşırığın növü</label>
+    <div class="type-toggle">
+      <div class="type-opt course" [class.active]="type() === 'course'" (click)="selectType('course')">
+        <div class="t-icon">🎬</div>
+        <div class="t-label">Kurs / Videolar</div>
+      </div>
+      <div class="type-opt trade" [class.active]="type() === 'trade'" (click)="selectType('trade')">
+        <div class="t-icon">💵</div>
+        <div class="t-label">Treyd hədəfi</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Tapşırığın adı</label>
+    <input type="text" [(ngModel)]="name" [placeholder]="namePlaceholder">
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Neçə günə bitirəcəksən?</label>
+      <input type="number" min="1" max="60" [(ngModel)]="days">
+    </div>
+    <div class="field">
+      @if (type() === 'course') {
+        <label>Gündə neçə video?</label>
+        <input type="number" min="1" max="200" [(ngModel)]="perDay">
+      } @else {
+        <label>Gündə nə qədər qazanmaq istəyirsən? ($)</label>
+        <input type="number" min="5" step="5" [(ngModel)]="dailyTarget">
+      }
+    </div>
+  </div>
+
+  @if (type() === 'trade') {
+    <div class="hint">Hər xana $5-ə bölünəcək (məs: $50 → 10 xana)</div>
+  } @else {
+    <div class="hint">Hər gün üçün bu qədər xanadan ibarət diaqram yaranacaq</div>
+  }
+
+  <div class="form-actions">
+    <button class="btn btn-secondary" (click)="onCancel()">Ləğv et</button>
+    <button class="btn btn-primary" (click)="onSubmit()">Yarat</button>
+  </div>
+</div>

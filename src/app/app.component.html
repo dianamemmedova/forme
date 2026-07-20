@@ -1,0 +1,15 @@
+<div class="wrap">
+  @switch (screen()) {
+    @case ('list') {
+      <app-task-list (openTask)="openTask($event)" (createTask)="goToForm()" />
+    }
+    @case ('form') {
+      <app-task-form (cancelled)="goToList()" (created)="onTaskCreated($event)" />
+    }
+    @case ('detail') {
+      @if (activeTaskId(); as id) {
+        <app-task-detail [id]="id" (back)="goToList()" />
+      }
+    }
+  }
+</div>

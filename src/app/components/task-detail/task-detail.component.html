@@ -1,0 +1,62 @@
+@if (task(); as t) {
+  <button class="back-btn" (click)="onBack()">← Bütün tapşırıqlar</button>
+
+  <div class="detail-head">
+    <h2>{{ t.name }}</h2>
+    <div class="sub">{{ t.type === 'course' ? 'Kurs izləmə' : 'Treyd hədəfi' }} · {{ t.days }} gün</div>
+  </div>
+
+  <div class="day-pills">
+    @for (day of dayList(); track day) {
+      <div class="day-pill"
+           [class.active]="selectedDay() === day"
+           [class.course]="t.type === 'course'"
+           [class.trade]="t.type === 'trade'"
+           [class.done]="isDayComplete(day)"
+           (click)="selectDay(day)">
+        Gün {{ day }}
+      </div>
+    }
+  </div>
+
+  <div class="grid-box">
+    <div class="grid-cells">
+      @for (on of cells(); track $index) {
+        <div class="cell"
+             [class.on]="on"
+             [class.course]="on && t.type === 'course'"
+             [class.trade]="on && t.type === 'trade'"
+             (click)="toggleCell($index)">
+          {{ cellLabel($index) }}
+        </div>
+      }
+    </div>
+    <div class="day-summary">
+      <span>
+        Gün {{ selectedDay() }}: <strong>{{ dayStats().done }}/{{ dayStats().total }}</strong>
+        {{ t.type === 'course' ? 'video' : 'xana' }}
+        @if (t.type === 'trade') {
+          · <strong>${{ earnedAmount() }}</strong> qazanıldı
+        }
+      </span>
+    </div>
+    <div class="banner" [class.show]="dayStats().complete" [class.course]="t.type === 'course'" [class.trade]="t.type === 'trade'">
+      @if (t.type === 'course') {
+        ✓ Günlük tamamlandı!
+      } @else {
+        ✓ Günlük hədəfə çatdın — ${{ t.dailyTarget }}!
+      }
+    </div>
+  </div>
+
+  <div class="task-summary-strip">
+    <div class="stat">
+      <div class="num">{{ overallStats().doneDays }}/{{ t.days }}</div>
+      <div class="lbl">Tamamlanan gün</div>
+    </div>
+    <div class="stat">
+      <div class="num">{{ overallStats().pct }}%</div>
+      <div class="lbl">Ümumi irəliləyiş</div>
+    </div>
+  </div>
+}

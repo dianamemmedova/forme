@@ -1,0 +1,43 @@
+<div class="app-header">
+  <div>
+    <div class="eyebrow">Hədəf İzləyici</div>
+    <h1>Tapşırıqlarım</h1>
+  </div>
+</div>
+
+@if (tasks().length === 0) {
+  <div class="empty">
+    <div class="icon">◇</div>
+    <p>
+      Hələ heç bir tapşırıq yoxdur.<br>
+      Kurs bitirmək və ya gündəlik treyd hədəfi üçün<br>
+      ilk tapşırığını yarat.
+    </p>
+  </div>
+} @else {
+  <div class="task-list">
+    @for (task of tasks(); track task.id) {
+      <div class="task-card" [class.course]="task.type === 'course'" [class.trade]="task.type === 'trade'" (click)="onOpen(task.id)">
+        <div class="task-card-top">
+          <div>
+            <div class="task-name">{{ task.name }}</div>
+            <div class="task-meta">{{ meta(task) }}</div>
+          </div>
+          <div class="task-card-actions">
+            <span class="task-tag" [class.course]="task.type === 'course'" [class.trade]="task.type === 'trade'">
+              {{ typeLabels[task.type] }}
+            </span>
+            <button class="delete-btn" (click)="onDelete(task.id, $event)">✕</button>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" [class.course]="task.type === 'course'" [class.trade]="task.type === 'trade'"
+               [style.width.%]="stats(task).pct"></div>
+        </div>
+        <div class="progress-label">{{ stats(task).doneDays }}/{{ task.days }} gün tamamlandı · {{ stats(task).pct }}%</div>
+      </div>
+    }
+  </div>
+}
+
+<button class="add-btn" (click)="onCreate()">+ Yeni tapşırıq yarat</button>
